@@ -4,24 +4,29 @@
 
 
 # Todo:
+- [x] 3D Modeling
 - [ ] VR navigation
-- [ ] hand modeling
-- [ ] start menu
-- [ ] select mode menu
-- [ ] furniture collision box
-- [ ] place the object
+- [ ] Hand modeling
+- [ ] Start menu
+  - [x] design
+  - [ ] implementation
+- [ ] Select mode menu
+  - [x] design
+  - [ ] implementation
+- [ ] Furniture collision box
+- [ ] Place the object
   - [ ] on the floor
   - [ ] on tables
-- [ ] select object menu
+- [ ] Select object menu
   - [ ] design
   - [ ] implementation
-- [ ] text/color system for objects
-- [ ] simplify objects
+- [ ] Text/color system for objects
+- [ ] Simplify objects
 - [ ] 2D blueprint to 3D apartment
 - [ ] Gallery
   - [ ] design
   - [ ] implementation
-- [ ] change the color/texture menu
+- [ ] Change the color/texture menu
   - [ ] design
   - [ ] implementation
-- [ ] export scene to image format
+- [ ] Export scene to image format
