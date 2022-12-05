@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: MainObjPropRing
+  m_EditorClassIdentifier: Assembly-CSharp::Ring
+  Elements:
+  - {fileID: 11400000, guid: 3f93578df434fcb4a843bdfb7fe2f9f3, type: 2}
+  - {fileID: 11400000, guid: 332c1f2041c1c4c4a83b75760059c271, type: 2}
+  - {fileID: 11400000, guid: 3f93578df434fcb4a843bdfb7fe2f9f3, type: 2}
+  - {fileID: 11400000, guid: 332c1f2041c1c4c4a83b75760059c271, type: 2}
