@@ -10,19 +10,19 @@ public class MenuInteractions : MonoBehaviour
     public void StartFromScratch()
     {
         Debug.Log("Show main scene! " + Scenes["Main"]);
-        //SceneManager.LoadScene(Scenes["Main"]);
+        SceneManager.LoadScene(Scenes["Main"]);
     }
 
     public void StartFromTemplate()
     {
         Debug.Log("Show template selector! " + Scenes["Template"]);
-        //SceneManager.LoadScene(Scenes["Template"]);
+        SceneManager.LoadScene(Scenes["Template"]);
     }
 
     public void Gallery()
     {
         Debug.Log("Show Gallery! " + Scenes["Gallery"]);
-        //SceneManager.LoadScene(Scenes["Gallery"]);
+        SceneManager.LoadScene(Scenes["Gallery"]);
     }
 
     private void Awake()
