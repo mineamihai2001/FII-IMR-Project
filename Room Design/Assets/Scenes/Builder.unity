@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -456,6 +456,46 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fail: {r: 0, g: 0, b: 0, a: 0}
   success: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &242150792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242150784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 906288f684b405b4d92cc49785be3133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchor: {fileID: 1076818542}
+  lookAt: {fileID: 75488821}
+  rotateButton:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Rotate Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 99fdc696-8d9a-48cf-9a53-04e1faeacfe8
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 1478584310925299263, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  moveButton:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Move Button
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: b91fc764-4158-46d0-b168-0c59bb984d3e
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  rotation: 36
 --- !u!1 &342686207
 GameObject:
   m_ObjectHideFlags: 0
@@ -2929,7 +2969,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1280275587}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15, y: 0.33, z: -0.18}
+  m_LocalPosition: {x: -0.15, y: 0.6, z: -3.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4420,7 +4460,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770817107}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 1.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
