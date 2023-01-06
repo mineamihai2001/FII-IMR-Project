@@ -12,19 +12,18 @@ public class MenuItemScript : MonoBehaviour
     public Image background;
 
 
-void Start()
-{
-    background.color = baseColor;
-}
+    void Start()
+    {
+        background.color = baseColor;
+    }
 
-public void Select()
-{
-    background.color = hoverColor;
-}
+    public void Select()
+    {
+        background.color = hoverColor;
+    }
 
-public void Deselect()
-{
-    background.color = baseColor
-}
-
+    public void Deselect()
+    {
+        background.color = baseColor;
+    }
 }
