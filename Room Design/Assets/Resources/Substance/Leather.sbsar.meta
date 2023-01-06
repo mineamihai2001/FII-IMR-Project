@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0cc08f21099286a418fc97396e5ac7f6
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: dda12f74ff9116a42b23482252b2c482, type: 3}
+  _instancesCopy:
+  - {fileID: 11400000, guid: 0d3af95645c72cc4f90e23d2d5a8a5d2, type: 2}
+  _fileAsset: {instanceID: 0}
+  _assetPath: Assets/Resources/Substance/Leather.sbsar
