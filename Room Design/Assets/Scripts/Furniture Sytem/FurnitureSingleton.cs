@@ -6,6 +6,7 @@ public class FurnitureSingleton : MonoBehaviour
 {
     static public GameObject getFurnitureByName(string name)
     {
+        Debug.Log("GETTING FURNITURE");
         GameObject furniture = new GameObject(name);
         furniture.AddComponent<RaleighSofaConstructor>();
 

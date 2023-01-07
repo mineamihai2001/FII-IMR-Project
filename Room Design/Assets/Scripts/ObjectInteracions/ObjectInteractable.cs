@@ -1,74 +1,64 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class ObjectInteractable : MonoBehaviour
+public class ObjectInteractable : XRSimpleInteractable
 {
-    public GameObject anchor;
-    public Transform lookAt;
-    public float rotationScale = 256.0f;
-    public float traslateScale = 10.0f;
+    //TODO make it static and make the singleton take care of it
+    private LayerMask floorMask;
+    public XRRayInteractor ray;
 
-    public InputActionProperty rotateButton; // LeftClick
-    public InputActionProperty moveButton; // should be "M"
+    private bool isGrabbed = false;
 
-    private bool RotationToggle { get; set; }
-    private bool MoveToogle { get; set; }
 
-    private Vector3 InitialAnchorPosition { get; set; }
-    private Vector3 ObjectInitialPosition { get; set; }
-
-    private void RotateHandler()
+    private void handleGrab()
     {
-        RotationToggle = rotateButton.action.WasPressedThisFrame() ? SwitchRotationToggle() : RotationToggle;
+        Vector3 rayOrigin = ray.transform.position;
+        Vector3 rayDirection = ray.transform.forward;
+        
+        var itHits = Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hitInfo, ray.maxRaycastDistance, floorMask);
 
-        if (RotationToggle)
-        {
-            Debug.Log("Rotate object activated");
-            var anchorRotation = anchor.transform.rotation;
-            var rotation = new Vector3(0, anchorRotation.y, 0);
-            this.transform.Rotate(rotation);
-        }
+        if (itHits)
+            transform.position = hitInfo.point;
+        else
+            transform.position = rayOrigin + rayDirection * 2f;
+
+        Vector3 relativePos = rayOrigin - transform.position;
+        relativePos.y = 0;
+        transform.rotation = Quaternion.LookRotation(relativePos);
     }
 
-    private void MoveHandler()
+    public void grabHandler(SelectEnterEventArgs args)
     {
-        MoveToogle = moveButton.action.WasPressedThisFrame() ? SwitchMoveToggle() : MoveToogle;
-
-        if (MoveToogle)
-        {
-            var anchorPosition = anchor.transform.position;
-
-            var move = anchorPosition - InitialAnchorPosition;
-            this.transform.Translate(move.x / traslateScale, 0, move.z / traslateScale);
-        }
+        //var obj = args.interactorObject;
+        //if (obj != ray)
+        //{
+        //    Debug.LogError("Wrong hand");
+        //    return;
+        //}
+        //Debug.Log("Grabbed");
+        isGrabbed = true;
     }
 
-    private bool SwitchMoveToggle()
+    public void releaseHandler(SelectExitEventArgs args)
     {
-        Debug.Log("Move is now " + MoveToogle);
-        InitialAnchorPosition = anchor.transform.position;
-        return !MoveToogle;
+        isGrabbed = false;
     }
 
-    private bool SwitchRotationToggle()
-    {
-        Debug.Log("Rotate is now " + RotationToggle);
-        return !RotationToggle;
-    }
 
-    private void Awake()
+    void Start()
     {
-        RotationToggle = false;
-        MoveToogle = false;
-        InitialAnchorPosition = anchor.transform.position;
-        ObjectInitialPosition = this.transform.position;
+        selectEntered.AddListener(grabHandler);
+        selectExited.AddListener(releaseHandler);
+        floorMask = LayerMask.GetMask("Floor");
     }
-
 
     // Update is called once per frame
     void Update()
     {
-        RotateHandler();
-        MoveHandler();
+        if (isGrabbed)
+        {
+            handleGrab();
+        }
     }
 }
