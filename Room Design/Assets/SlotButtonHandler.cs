@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class SlotButtonHandler : MonoBehaviour
+public class SlotButtonHandler : XRSimpleInteractable
 {
-    
-    public void getFurniture(string name)
+
+    public void SelectHandler(SelectEnterEventArgs args)
     {
-        Debug.Log("CLICKED");
-        GameObject furniture = FurnitureSingleton.getFurnitureByName(name);
-        furniture.transform.position = new Vector3(0, 0, 0);
+        var furniture = FurnitureSingleton.getFurnitureByName("Raleigh Sofa");
+    }
+
+    void Start()
+    {
+        selectEntered.AddListener(SelectHandler);
     }
 }

@@ -73,6 +73,19 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
 
     abstract protected void Construct();
 
+    virtual protected void RecalculateBoxCollider()
+    {
+        //BoxCollider boxCollider = gameObject.GetComponent<BoxCollider>();
+        //if (boxCollider == null)
+        //    boxCollider = gameObject.AddComponent<BoxCollider>();
+
+        //var renderer = gameObject.GetComponent<Renderer>();
+
+        //boxCollider.center = renderer.bounds.center - gameObject.transform.position;
+        //boxCollider.size = renderer.bounds.size;
+
+    }
+
     public void Reconstruct()
     {
         //destroy each child
@@ -81,6 +94,7 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
             Destroy(child.gameObject);
         }
         Construct();
+        RecalculateBoxCollider();
     }
         
     public void Start()

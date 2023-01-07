@@ -4,12 +4,13 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class ObjectInteractable : XRSimpleInteractable
 {
-    //TODO make it static and make the singleton take care of it
-    private LayerMask floorMask;
-    public XRRayInteractor ray;
+    public static LayerMask floorMask;
+    public static XRRayInteractor ray;
+    public static InputActionProperty grabButton;
 
     private bool isGrabbed = false;
-
+    private bool wasForcedGrabbed = false;
+    private Collider colliderComponent;
 
     private void handleGrab()
     {
@@ -19,7 +20,11 @@ public class ObjectInteractable : XRSimpleInteractable
         var itHits = Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hitInfo, ray.maxRaycastDistance, floorMask);
 
         if (itHits)
-            transform.position = hitInfo.point;
+        {
+            var relativeColliderCenter = gameObject.transform.position.y - colliderComponent.bounds.center.y;
+            var halfHeight = colliderComponent.bounds.extents.y + relativeColliderCenter;
+            transform.position = hitInfo.point + new Vector3(0, halfHeight, 0);
+        }
         else
             transform.position = rayOrigin + rayDirection * 2f;
 
@@ -28,7 +33,7 @@ public class ObjectInteractable : XRSimpleInteractable
         transform.rotation = Quaternion.LookRotation(relativePos);
     }
 
-    public void grabHandler(SelectEnterEventArgs args)
+    private void GrabHandler(SelectEnterEventArgs args)
     {
         //var obj = args.interactorObject;
         //if (obj != ray)
@@ -40,22 +45,32 @@ public class ObjectInteractable : XRSimpleInteractable
         isGrabbed = true;
     }
 
-    public void releaseHandler(SelectExitEventArgs args)
+    private void ReleaseHandler(SelectExitEventArgs args)
     {
         isGrabbed = false;
     }
 
+    public void ForceGrab()
+    {
+        isGrabbed = true;
+        wasForcedGrabbed = true;
+    }
 
     void Start()
     {
-        selectEntered.AddListener(grabHandler);
-        selectExited.AddListener(releaseHandler);
-        floorMask = LayerMask.GetMask("Floor");
+        selectEntered.AddListener(GrabHandler);
+        selectExited.AddListener(ReleaseHandler);
+        colliderComponent = GetComponent<Collider>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (wasForcedGrabbed && grabButton.action.WasReleasedThisFrame() )
+        {
+            wasForcedGrabbed = false;
+            isGrabbed = false;
+        }
         if (isGrabbed)
         {
             handleGrab();

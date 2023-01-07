@@ -12,7 +12,7 @@ public class GraphMaterialHandler : MonoBehaviour
 
     protected SemaphoreSlim materialLock = new SemaphoreSlim(1);
 
-    private void instantiateSubstance()
+    private void InstantiateSubstance()
     {
         gameObject.SetActive(false);
         runtimeSubstance = gameObject.AddComponent<SubstanceRuntimeGraph>();
@@ -21,16 +21,10 @@ public class GraphMaterialHandler : MonoBehaviour
         //Debug.Log("Instantiated");
     }
 
-    //Awake
-    //public void Awake()
-    //{
-    //    Debug.Log("Awake");
-    //}
-
-    //public void Start()
-    //{
-    //    Debug.Log("Start");
-    //}
+    private void Awake()
+    {
+        InstantiateSubstance();
+    }
 
     public async System.Threading.Tasks.Task<Material> getMaterial(Dictionary<string, float> inputValues)
     {
@@ -39,14 +33,12 @@ public class GraphMaterialHandler : MonoBehaviour
         try
         {
             //Debug.Log("we start");
-            instantiateSubstance();
+            //instantiateSubstance();
             foreach (var setting in inputValues)
             {
                 runtimeSubstance.SetInputFloat(setting.Key, setting.Value);
             }
             var renderTask = runtimeSubstance.RenderAsync();
-            //renderTask.Wait();
-            //renderTask.RunSynchronously();
             await renderTask;
             return new Material(runtimeSubstance.DefaulMaterial);
         }
