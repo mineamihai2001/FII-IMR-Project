@@ -9,8 +9,9 @@ using UnityEngine;
 public class GraphMaterialDynamicTexture
 {
     private readonly Dictionary<ColorEnum, Material> materials = new();
-    private readonly Dictionary<ColorEnum, Dictionary<string, float>> color_settings = new();
+    private readonly Dictionary<ColorEnum, Dictionary<string, dynamic>> colorSettings = new();
     private readonly GraphMaterialHandler handler;
+    private Dictionary<string, dynamic> defaultSettings = new();
     
     public GraphMaterialDynamicTexture(string graphPath, GameObject gameObject)
     {
@@ -20,16 +21,36 @@ public class GraphMaterialDynamicTexture
         gameObject.SetActive(true);
     }
 
+    public GraphMaterialDynamicTexture SetDefaultSettings(Dictionary<string, dynamic> defaultSettings)
+    {
+        this.defaultSettings = defaultSettings;
+        return this;
+    }
+
+    private Dictionary<string, dynamic> GetSettings(ColorEnum color)
+    {
+        var settings = new Dictionary<string, dynamic>(defaultSettings);
+
+        if (colorSettings.ContainsKey(color))
+        {
+            foreach (var setting in colorSettings[color])
+            {
+                settings[setting.Key] = setting.Value;
+            }
+        }
+        return settings;
+    }
+
     public async Task<Material> GetMaterial(ColorEnum color)
     {
         if (!materials.ContainsKey(color) || materials[color] == null)
-            materials[color] = await handler.getMaterial(color_settings[color]);
+            materials[color] = await handler.GetMaterial(GetSettings(color));
         return materials[color];
     }
 
-    public GraphMaterialDynamicTexture AddColor(ColorEnum color, Dictionary<string, float> settings)
+    public GraphMaterialDynamicTexture AddColor(ColorEnum color, Dictionary<string, dynamic> settings)
     {
-        color_settings[color] = settings;
+        colorSettings[color] = settings;
         return this;
     }
 }
@@ -54,6 +75,11 @@ public class DynamicTexturingSingleton : MonoBehaviour
 
         var LeatherDynamicMaterial = new GraphMaterialDynamicTexture("Substance/Leather_graph_0/graph_0", gameObject);
         LeatherDynamicMaterial
+            .SetDefaultSettings(new() {
+                {"color_luminosity", 0.5f},
+                {"color_hue", 0.5f},
+                {"color_saturation", 0.5f},
+            })
             .AddColor(ColorEnum.White, new()
             {
                 { "color_luminosity", 0.69f},

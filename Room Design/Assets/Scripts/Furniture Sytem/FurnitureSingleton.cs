@@ -18,8 +18,9 @@ public class FurnitureSingleton : MonoBehaviour
     {
         Debug.Log("GETTING FURNITURE");
         GameObject furniture = new GameObject(name);
-        furniture.AddComponent<BoxCollider>();
-        furniture.AddComponent<RaleighSofaConstructor>();
+        // r = random between [0, 2]
+        var r = Random.Range(0, 3);
+        var sofaConstructorComponent = furniture.AddComponent<RaleighSofaConstructor>();
         var objInteractableComponent = furniture.AddComponent<ObjectInteractable>();
 
         objInteractableComponent.ForceGrab();
