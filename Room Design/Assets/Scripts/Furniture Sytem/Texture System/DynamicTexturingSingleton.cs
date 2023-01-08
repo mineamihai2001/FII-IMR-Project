@@ -24,7 +24,6 @@ public class GraphMaterialDynamicTexture
     {
         if (!materials.ContainsKey(color) || materials[color] == null)
             materials[color] = await handler.getMaterial(color_settings[color]);
-        Debug.Log("Creating " + color);
         return materials[color];
     }
 
@@ -45,8 +44,8 @@ public class DynamicTexturingSingleton : MonoBehaviour
 
     static DynamicTexturingSingleton()
     {
-        var aux = new GameObject("DynamicTexturingSingleton");
-        aux.AddComponent<DynamicTexturingSingleton>();
+        //var aux = new GameObject("DynamicTexturingSingleton");
+        //aux.AddComponent<DynamicTexturingSingleton>();
     }
 
     private void Init()

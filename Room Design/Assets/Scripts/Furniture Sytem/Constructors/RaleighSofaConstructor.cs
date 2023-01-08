@@ -3,6 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class ArrayOfGameObjectsReturnType
+{
+    public float size { get; }
+    public List<GameObject> objList { get; }
+
+    public ArrayOfGameObjectsReturnType(float size, List<GameObject> objList)
+    {
+        this.size = size;
+        this.objList = objList;
+    }
+}
+
 public class RaleighSofaConstructor : FurnitureConstructor<RaleighSofaConstructor>
 {
     override protected string GetPath() { return "Furniture/Sofa/Raleigh/"; }
@@ -18,6 +30,17 @@ public class RaleighSofaConstructor : FurnitureConstructor<RaleighSofaConstructo
     {
         base.Awake();
         parameters.Add("Sofa Size", new(1, 1, 4));
+    }
+
+    protected override void RecalculateBoxCollider()
+    {
+        BoxCollider boxCollider = GetComponent<BoxCollider>();
+
+        if (boxCollider == null)
+            boxCollider = gameObject.AddComponent<BoxCollider>();
+        //TODO: parametrize
+        boxCollider.size = new Vector3(0.86f, 0.86f, 0.9f);
+        boxCollider.center = new Vector3(0f, 0.43f, 0.1f);
     }
 
     public List<string> GetFurnitureParameters()
@@ -116,12 +139,13 @@ public class RaleighSofaConstructor : FurnitureConstructor<RaleighSofaConstructo
         objMesh.RecalculateTangents();
     }
 
-    private static float ArrayOfGameObject(GameObject obj, int count, float spaceBetween = 0f)
+    private static ArrayOfGameObjectsReturnType ArrayOfGameObject(GameObject obj, int count, float spaceBetween = 0f)
     {
+        List<GameObject> objList = new() { obj };
         var objSize = GetSize(obj, true);
         var xSize = objSize.x;
         if (count == 1)
-            return xSize;
+            return new (xSize, objList);
 
         float rv = xSize * count + spaceBetween * (count - 1);
         obj.transform.position += new Vector3((rv-xSize)/2, 0, 0);
@@ -131,9 +155,10 @@ public class RaleighSofaConstructor : FurnitureConstructor<RaleighSofaConstructo
         {
             GameObject clone = Instantiate(obj, obj.transform.parent, false);
             clone.transform.position -= new Vector3(objSize.x * i + spaceBetween * i, 0, 0);
+            objList.Add(clone);
         }
 
-        return rv;
+        return new(rv, objList);
     }
 
     protected async override void Construct()
@@ -141,52 +166,81 @@ public class RaleighSofaConstructor : FurnitureConstructor<RaleighSofaConstructo
 
         var sofaSize = parameters["Sofa Size"].Value;
 
-        var leatherMaterial = await getMaterial(1);
-        var woodMaterial = await getMaterial(0);
+
 
         GameObject bottomPillow = GetPart("bottom_pillow");
-        bottomPillow.GetComponent<Renderer>().material = leatherMaterial;
+        //bottomPillow.GetComponent<Renderer>().material = leatherMaterial;
         var bottomPillowSize = GetSize(bottomPillow);
         bottomPillow.transform.position += new Vector3(0, 0.356754f, -0.04246f);
-        var pillowArraySize = ArrayOfGameObject(bottomPillow, sofaSize) / 100f;
+        var bottomPillowArray = ArrayOfGameObject(bottomPillow, sofaSize);
+        var pillowArraySize = bottomPillowArray.size / 100f;
         float objectsOffsize = (pillowArraySize - bottomPillowSize.x)/2;
         Vector3 objectOffsetVector = new(objectsOffsize * 100f, 0f, 0f);
 
         GameObject bottomBase = GetPart("bottom_base");
-        bottomBase.GetComponent<Renderer>().material = leatherMaterial;
+        //bottomBase.GetComponent<Renderer>().material = leatherMaterial;
         bottomBase.transform.position += new Vector3(0, 0.34402f, 0);
         MiddleSplitMeshe(bottomBase, objectsOffsize);
 
 
         GameObject backBase = GetPart("back_base");
-        backBase.GetComponent<Renderer>().material = leatherMaterial;
+        //backBase.GetComponent<Renderer>().material = leatherMaterial;
         backBase.transform.position += new Vector3(0, 0.545357f, 0.409679f);
-        ArrayOfGameObject(backBase, sofaSize);
+        var backBaseArray = ArrayOfGameObject(backBase, sofaSize);
 
         GameObject backLeg = GetPart("back_leg");
-        backLeg.GetComponent<Renderer>().material = woodMaterial;
+        //backLeg.GetComponent<Renderer>().material = woodMaterial;
         backLeg.transform.position += new Vector3(0, 0.198041f, 0.47664f);
-        ArrayOfGameObject(backLeg, 2, 2 * (0.245601f + objectsOffsize * 100 ) - GetSize(backLeg).x * 100);
+        var backLegArray = ArrayOfGameObject(backLeg, 2, 2 * (0.245601f + objectsOffsize * 100 ) - GetSize(backLeg).x * 100);
 
         GameObject frontLeg = GetPart("front_leg");
-        frontLeg.GetComponent<Renderer>().material = woodMaterial;
+        //frontLeg.GetComponent<Renderer>().material = woodMaterial;
         frontLeg.transform.position += new Vector3(0, 0.111322f, -0.31311f);
-        ArrayOfGameObject(frontLeg, 2, 2 * (0.3785f + objectsOffsize * 100) - GetSize(frontLeg).x * 100);
+        var frontLegArray = ArrayOfGameObject(frontLeg, 2, 2 * (0.3785f + objectsOffsize * 100) - GetSize(frontLeg).x * 100);
 
         GameObject curveGrid = GetPart("cube_grid");
-        curveGrid.GetComponent<Renderer>().material = woodMaterial;
+        //curveGrid.GetComponent<Renderer>().material = woodMaterial;
         curveGrid.transform.position += new Vector3(0, 0.194029f, 0.085f);
         MiddleSplitMeshe(curveGrid, objectsOffsize);
 
 
         GameObject backPillow = GetPart("top_pillow");
-        backPillow.GetComponent<Renderer>().material = leatherMaterial;
+        //backPillow.GetComponent<Renderer>().material = leatherMaterial;
         backPillow.transform.position += new Vector3(0, 0.628776f, 0.311343f);
-        ArrayOfGameObject(backPillow, sofaSize);
+        var backPillowArray = ArrayOfGameObject(backPillow, sofaSize);
 
         GameObject topCylinder = GetPart("top_cylinder");
-        topCylinder.GetComponent<Renderer>().material = woodMaterial;
+        //topCylinder.GetComponent<Renderer>().material = woodMaterial;
         topCylinder.transform.position += new Vector3(0, 0.516011f, 0.463692f);
         MiddleSplitMeshe(topCylinder, objectsOffsize);
+
+        //TODO check if scale is needed
+        gameObject.transform.localScale = new Vector3(1f, 1f, -1f);
+
+        var leatherMaterial = await getMaterial(1);
+        var woodMaterial = await getMaterial(0);
+
+        foreach (var item in bottomPillowArray.objList)
+            item.GetComponent<Renderer>().material = leatherMaterial;
+
+        foreach (var item in backBaseArray.objList)
+            item.GetComponent<Renderer>().material = leatherMaterial;
+
+        foreach (var item in backLegArray.objList)
+            item.GetComponent<Renderer>().material = woodMaterial;
+
+        foreach (var item in frontLegArray.objList)
+            item.GetComponent<Renderer>().material = woodMaterial;
+
+        foreach (var item in backPillowArray.objList)
+            item.GetComponent<Renderer>().material = leatherMaterial;
+
+        
+
+        bottomBase.GetComponent<Renderer>().material = leatherMaterial;
+        topCylinder.GetComponent<Renderer>().material = woodMaterial;
+        curveGrid.GetComponent<Renderer>().material = woodMaterial;
+        
+        
     }
 }

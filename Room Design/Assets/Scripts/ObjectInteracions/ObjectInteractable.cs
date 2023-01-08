@@ -1,74 +1,79 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class ObjectInteractable : MonoBehaviour
+public class ObjectInteractable : XRSimpleInteractable
 {
-    public GameObject anchor;
-    public Transform lookAt;
-    public float rotationScale = 256.0f;
-    public float traslateScale = 10.0f;
+    public static LayerMask floorMask;
+    public static XRRayInteractor ray;
+    public static InputActionProperty grabButton;
 
-    public InputActionProperty rotateButton; // LeftClick
-    public InputActionProperty moveButton; // should be "M"
+    private bool isGrabbed = false;
+    private bool wasForcedGrabbed = false;
+    private Collider colliderComponent;
 
-    private bool RotationToggle { get; set; }
-    private bool MoveToogle { get; set; }
-
-    private Vector3 InitialAnchorPosition { get; set; }
-    private Vector3 ObjectInitialPosition { get; set; }
-
-    private void RotateHandler()
+    private void handleGrab()
     {
-        RotationToggle = rotateButton.action.WasPressedThisFrame() ? SwitchRotationToggle() : RotationToggle;
+        Vector3 rayOrigin = ray.transform.position;
+        Vector3 rayDirection = ray.transform.forward;
+        
+        var itHits = Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hitInfo, ray.maxRaycastDistance, floorMask);
 
-        if (RotationToggle)
+        if (itHits)
         {
-            Debug.Log("Rotate object activated");
-            var anchorRotation = anchor.transform.rotation;
-            var rotation = new Vector3(0, anchorRotation.y, 0);
-            this.transform.Rotate(rotation);
+            var relativeColliderCenter = gameObject.transform.position.y - colliderComponent.bounds.center.y;
+            var halfHeight = colliderComponent.bounds.extents.y + relativeColliderCenter;
+            transform.position = hitInfo.point + new Vector3(0, halfHeight, 0);
         }
+        else
+            transform.position = rayOrigin + rayDirection * 2f;
+
+        Vector3 relativePos = rayOrigin - transform.position;
+        relativePos.y = 0;
+        transform.rotation = Quaternion.LookRotation(relativePos);
     }
 
-    private void MoveHandler()
+    private void GrabHandler(SelectEnterEventArgs args)
     {
-        MoveToogle = moveButton.action.WasPressedThisFrame() ? SwitchMoveToggle() : MoveToogle;
-
-        if (MoveToogle)
-        {
-            var anchorPosition = anchor.transform.position;
-
-            var move = anchorPosition - InitialAnchorPosition;
-            this.transform.Translate(move.x / traslateScale, 0, move.z / traslateScale);
-        }
+        //var obj = args.interactorObject;
+        //if (obj != ray)
+        //{
+        //    Debug.LogError("Wrong hand");
+        //    return;
+        //}
+        //Debug.Log("Grabbed");
+        isGrabbed = true;
     }
 
-    private bool SwitchMoveToggle()
+    private void ReleaseHandler(SelectExitEventArgs args)
     {
-        Debug.Log("Move is now " + MoveToogle);
-        InitialAnchorPosition = anchor.transform.position;
-        return !MoveToogle;
+        isGrabbed = false;
     }
 
-    private bool SwitchRotationToggle()
+    public void ForceGrab()
     {
-        Debug.Log("Rotate is now " + RotationToggle);
-        return !RotationToggle;
+        isGrabbed = true;
+        wasForcedGrabbed = true;
     }
 
-    private void Awake()
+    void Start()
     {
-        RotationToggle = false;
-        MoveToogle = false;
-        InitialAnchorPosition = anchor.transform.position;
-        ObjectInitialPosition = this.transform.position;
+        selectEntered.AddListener(GrabHandler);
+        selectExited.AddListener(ReleaseHandler);
+        colliderComponent = GetComponent<Collider>();
     }
-
 
     // Update is called once per frame
     void Update()
     {
-        RotateHandler();
-        MoveHandler();
+        if (wasForcedGrabbed && grabButton.action.WasReleasedThisFrame() )
+        {
+            wasForcedGrabbed = false;
+            isGrabbed = false;
+        }
+        if (isGrabbed)
+        {
+            handleGrab();
+        }
     }
 }
