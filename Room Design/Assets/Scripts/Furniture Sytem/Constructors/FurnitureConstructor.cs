@@ -126,6 +126,8 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
     protected Task<Material> GetMaterial(int index)
     {
         var collorPalleteIndex = parameters["Color Palette Index"].Value;
+        Debug.Log("Color Palette Index: " + collorPalleteIndex);
+        Debug.Log("Palette Index" + index);
         return colorPaletteList[collorPalleteIndex].GetMaterial(index);
     }
 }

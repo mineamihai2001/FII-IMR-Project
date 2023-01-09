@@ -16,6 +16,5 @@ public class TestMaterial : MonoBehaviour
     void Start()
     {
         AddMaterial();
-        ColorEnum
     }
 }
