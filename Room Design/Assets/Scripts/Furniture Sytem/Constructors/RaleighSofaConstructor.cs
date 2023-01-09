@@ -217,8 +217,8 @@ public class RaleighSofaConstructor : FurnitureConstructor<RaleighSofaConstructo
         //TODO check if scale is needed
         gameObject.transform.localScale = new Vector3(1f, 1f, -1f);
 
-        var leatherMaterial = await getMaterial(1);
-        var woodMaterial = await getMaterial(0);
+        var leatherMaterial = await GetMaterial(1);
+        var woodMaterial = await GetMaterial(0);
 
         foreach (var item in bottomPillowArray.objList)
             item.GetComponent<Renderer>().material = leatherMaterial;

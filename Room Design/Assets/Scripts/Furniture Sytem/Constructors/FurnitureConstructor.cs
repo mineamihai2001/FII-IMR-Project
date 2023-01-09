@@ -50,14 +50,16 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
     protected GameObject GetPart(string name)
     {
         string objectPath = GetPath() + name;
-        GameObject rv = Resources.Load<GameObject>(objectPath);
-        GameObject instance = Instantiate(rv);
+        GameObject prefab = Resources.Load<GameObject>(objectPath);
+        GameObject instance = Instantiate(prefab);
         instance.transform.parent = gameObject.transform;
         instance.transform.position = gameObject.transform.position;
         //gameObjects.Add(instance);
 
         return instance;
     }
+
+    
 
     protected virtual void Awake()
     {
@@ -103,8 +105,25 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
         Reconstruct();
     }
 
+    protected void GetBoxCollider(GameObject childObj)
+    {
+        BoxCollider childBoxCollider = childObj.GetComponent<BoxCollider>();
+        BoxCollider boxCollider = gameObject.AddComponent<BoxCollider>();
 
-    protected Task<Material> getMaterial(int index)
+        boxCollider.center = childBoxCollider.center;
+        boxCollider.size = childBoxCollider.size;
+    }
+
+    protected GameObject BePart(string name)
+    {
+        GameObject obj = GetPart(name);
+        if (obj.GetComponent<BoxCollider>() != null)
+            GetBoxCollider(obj);
+        GetBoxCollider(obj);
+        return obj;
+    }
+
+    protected Task<Material> GetMaterial(int index)
     {
         var collorPalleteIndex = parameters["Color Palette Index"].Value;
         return colorPaletteList[collorPalleteIndex].GetMaterial(index);
