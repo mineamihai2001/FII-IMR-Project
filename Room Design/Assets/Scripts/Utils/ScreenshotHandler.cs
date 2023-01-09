@@ -52,10 +52,10 @@ public class ScreenshotHandler : MonoBehaviour
 
     public void Update()
     {
-        // if (takeButton.action.WasPressedThisFrame())
-        // {
-        //     TakeScreenshot(500, 500);
-        //     Debug.Log("Photo taken");
-        // }
+        if (takeButton.action.WasPressedThisFrame())
+        {
+            TakeScreenshot(500, 500);
+            Debug.Log("Photo taken");
+        }
     }
 }
