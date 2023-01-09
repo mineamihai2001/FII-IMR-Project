@@ -95,11 +95,73 @@ public class DynamicTexturingSingleton : MonoBehaviour
                 {"color_saturation", 0.483f},
             });
 
+            var MarbleDynamicMaterial = new GraphMaterialDynamicTexture("Substance/Marble_graph_0/graph_0", gameObject);
+             MarbleDynamicMaterial
+            .SetDefaultSettings(new() {
+                {"color_foreground", new Color(168, 168, 168)},
+                {"strength_foreground", 0.159f},
+                {"strength_background",  0.128f},
+                {"roughness", 0.151f },
+                {"strength_bumps ",  0f},
+            })
+            .AddColor(ColorEnum.White, new()
+            {
+                { "color_foreground", new Color(0, 0, 0)},
+                {"strength_foreground", 0.200f},
+                {"strength_background",  0.50f},
+            })
+            .AddColor(ColorEnum.Black, new()
+            { 
+                { "color_foreground", new Color(100, 150, 100)},
+            });
+
+            var PlasticDynamicMaterial = new GraphMaterialDynamicTexture("Substance/Plastic_graph_0/graph_0", gameObject);
+             PlasticDynamicMaterial
+            .SetDefaultSettings(new() {
+                {"color", new Color(50, 53, 84)},
+                {"color_noise", 0f},
+                {"fine_grain",  0.013f},
+                {"random_grain", 0.182f },
+                {"roughness_contrast",  -0.4f},
+                {"roughness_low",  -0.635f},
+                {"large_scratches",  0.006f},
+
+            })
+             .AddColor(ColorEnum.White, new()
+            {
+                {"color", new Color(247, 247, 250)},
+                {"color_noise", 0.2f},
+                {"fine_grain",  0.050f},
+                {"random_grain", 0.200f },
+            })
+            .AddColor(ColorEnum.Black, new()
+            { 
+                {"color", new Color(0, 0, 0)},
+            })
+             .AddColor(ColorEnum.Red, new()
+            {
+                {"color", new Color(50, 10, 10)},
+                {"color_noise", 0.1f},
+                {"roughness_low",  -0.500f},
+                {"large_scratches",  0.020f},
+
+            })
+            .AddColor(ColorEnum.Green, new()
+            {
+                {"color", new Color(51, 105, 36)},
+                {"random_grain", 0.100f },
+                {"roughness_contrast",  -0.1f},
+                {"roughness_low",  -0.500f},
+                {"large_scratches",  0.005f}, 
+            });
+
         DynamicTextures["Leather"] = LeatherDynamicMaterial;
         StaticTextures["Dark Wood"] = Resources.Load<Material>("Materials/Dark Wood/Material");
         StaticTextures["Light Wood"] = Resources.Load<Material>("Materials/Light Wood/Material");
 
     }
+
+
 
     void Awake()
     {

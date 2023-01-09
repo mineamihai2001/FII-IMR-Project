@@ -7,4 +7,6 @@ public enum ColorEnum
     White,
     Black,
     SilverSand,
+    Green,
+    Red,
 }

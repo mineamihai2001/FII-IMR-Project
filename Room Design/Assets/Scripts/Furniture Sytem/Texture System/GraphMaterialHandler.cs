@@ -23,7 +23,7 @@ public class GraphMaterialHandler : MonoBehaviour
 
     private void Awake()
     {
-        InstantiateSubstance();
+       //InstantiateSubstance();
     }
 
     private void SetMaterialSettings(Dictionary<string, dynamic> settings)
@@ -47,7 +47,7 @@ public class GraphMaterialHandler : MonoBehaviour
         try
         {
             //Debug.Log("we start");
-            //instantiateSubstance();
+            InstantiateSubstance();
             SetMaterialSettings(inputValues);
             var renderTask = runtimeSubstance.RenderAsync();
             await renderTask;
