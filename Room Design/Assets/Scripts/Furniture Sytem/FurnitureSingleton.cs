@@ -8,22 +8,27 @@ public class FurnitureSingleton : MonoBehaviour
 {
     public XRRayInteractor ray;
     public InputActionProperty grabButton;
+    private static Dictionary<string, System.Type> constructors = new(){
+        {"Bottom Cabinet", typeof(CabinetBottomConstructor)},
+        {"Raleigh Sofa", typeof(RaleighSofaConstructor)}
+    };
+
     void Awake()
     {
         ObjectInteractable.floorMask = LayerMask.GetMask("Floor");
         ObjectInteractable.ray = ray;
         ObjectInteractable.grabButton = grabButton;
     }
-    static public GameObject getFurnitureByName(string name)
+    static public GameObject GetFurnitureByName(string name)
     {
         Debug.Log("GETTING FURNITURE");
         GameObject furniture = new GameObject(name);
-        furniture.AddComponent<BoxCollider>();
-        furniture.AddComponent<RaleighSofaConstructor>();
+        //var sofaConstructorComponent = furniture.AddComponent<RaleighSofaConstructor>();
+        var constructorComponent = furniture.AddComponent(constructors[name]) as FurnitureConstructor<dynamic>;
         var objInteractableComponent = furniture.AddComponent<ObjectInteractable>();
 
         objInteractableComponent.ForceGrab();
-        
+
 
         return furniture;
     }

@@ -23,21 +23,32 @@ public class GraphMaterialHandler : MonoBehaviour
 
     private void Awake()
     {
-        InstantiateSubstance();
+        //InstantiateSubstance();
     }
 
-    public async System.Threading.Tasks.Task<Material> getMaterial(Dictionary<string, float> inputValues)
+    private void SetMaterialSettings(Dictionary<string, dynamic> settings)
+    {
+        foreach (var setting in settings)
+        {
+
+            if (setting.Value.GetType() == typeof(float))
+                runtimeSubstance.SetInputFloat(setting.Key, setting.Value);
+            else if (setting.Value.GetType() == typeof(Color))
+                runtimeSubstance.SetInputColor(setting.Key, setting.Value);
+            else
+                Debug.LogError("Invalid type for setting " + setting.Key);
+        }
+    }
+
+    public async System.Threading.Tasks.Task<Material> GetMaterial(Dictionary<string, dynamic> inputValues)
     {
 
         await materialLock.WaitAsync();
         try
         {
             //Debug.Log("we start");
-            //instantiateSubstance();
-            foreach (var setting in inputValues)
-            {
-                runtimeSubstance.SetInputFloat(setting.Key, setting.Value);
-            }
+            InstantiateSubstance();
+            SetMaterialSettings(inputValues);
             var renderTask = runtimeSubstance.RenderAsync();
             await renderTask;
             return new Material(runtimeSubstance.DefaulMaterial);

@@ -39,7 +39,7 @@ public class FurnitureParameterNotFoundException : Exception
 }
 
 
-public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
+public abstract class FurnitureConstructor<T> : IFurnitureContructor where T : class
 {
     protected readonly Dictionary<string, FurnitureParameter> parameters = new();
     //private readonly List<GameObject> gameObjects = new();
@@ -50,8 +50,8 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
     protected GameObject GetPart(string name)
     {
         string objectPath = GetPath() + name;
-        GameObject rv = Resources.Load<GameObject>(objectPath);
-        GameObject instance = Instantiate(rv);
+        GameObject prefab = Resources.Load<GameObject>(objectPath);
+        GameObject instance = Instantiate(prefab);
         instance.transform.parent = gameObject.transform;
         instance.transform.position = gameObject.transform.position;
         //gameObjects.Add(instance);
@@ -59,12 +59,14 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
         return instance;
     }
 
+    
+
     protected virtual void Awake()
     {
         parameters.Add("Color Palette Index", new FurnitureParameter(0, 0, colorPaletteList.Count - 1));
     }
 
-    public void SetParameter(string parameterName, int value)
+    public override void SetParameter(string parameterName, int value)
     {
         if (!parameters.ContainsKey(parameterName))
             throw new FurnitureParameterNotFoundException(parameterName);
@@ -86,7 +88,7 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
 
     }
 
-    public void Reconstruct()
+    override public void Reconstruct()
     {
         //destroy each child
         foreach (Transform child in transform)
@@ -103,10 +105,29 @@ public abstract class FurnitureConstructor<T> : MonoBehaviour where T : class
         Reconstruct();
     }
 
+    protected void GetBoxCollider(GameObject childObj)
+    {
+        BoxCollider childBoxCollider = childObj.GetComponent<BoxCollider>();
+        BoxCollider boxCollider = gameObject.AddComponent<BoxCollider>();
 
-    protected Task<Material> getMaterial(int index)
+        boxCollider.center = childBoxCollider.center;
+        boxCollider.size = childBoxCollider.size;
+    }
+
+    protected GameObject BePart(string name)
+    {
+        GameObject obj = GetPart(name);
+        if (obj.GetComponent<BoxCollider>() != null)
+            GetBoxCollider(obj);
+        GetBoxCollider(obj);
+        return obj;
+    }
+
+    protected Task<Material> GetMaterial(int index)
     {
         var collorPalleteIndex = parameters["Color Palette Index"].Value;
+        Debug.Log("Color Palette Index: " + collorPalleteIndex);
+        Debug.Log("Palette Index" + index);
         return colorPaletteList[collorPalleteIndex].GetMaterial(index);
     }
 }
