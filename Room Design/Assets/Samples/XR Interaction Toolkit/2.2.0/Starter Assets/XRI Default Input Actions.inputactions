@@ -870,6 +870,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Object Menu",
+                    "type": "Button",
+                    "id": "2b77a20d-0b29-4dc8-9751-dc3374ad31a2",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -980,6 +989,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Take Photo Custom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98d0f043-6fce-4c51-bba4-9d0f3732d886",
+                    "path": "<XRController>{RightHand}/menuButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Object Menu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac2425b9-e8f9-4a35-9eb4-8321bf72eddf",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Object Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
