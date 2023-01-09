@@ -6,17 +6,21 @@ public class TestFurniturePalette : MonoBehaviour
 {
     public int colorPaletteIndex = 0;
     private int oldColorPaletteIndex = 0;
-
+    
     private void Update()
     {
         if (colorPaletteIndex != oldColorPaletteIndex)
         {
             Debug.Log("Color Palette Index Changed");
-            FurnitureConstructor<dynamic> furnitureConstructor = gameObject.GetComponent<FurnitureConstructor<dynamic>>();
+            var furnitureConstructor = gameObject.GetComponent<IFurnitureContructor>();
             if (furnitureConstructor != null)
             {
                 furnitureConstructor.SetParameter("Color Palette Index", colorPaletteIndex);
                 furnitureConstructor.Reconstruct();
+            }
+            else
+            {
+                Debug.LogError("Furniture Constructor not found");
             }
             oldColorPaletteIndex = colorPaletteIndex;
         }
