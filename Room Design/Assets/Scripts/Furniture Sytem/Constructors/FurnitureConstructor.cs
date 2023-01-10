@@ -64,6 +64,7 @@ public abstract class FurnitureConstructor<T> : IFurnitureContructor where T : c
     protected virtual void Awake()
     {
         parameters.Add("Color Palette Index", new FurnitureParameter(0, 0, colorPaletteList.Count - 1));
+        RecalculateBoxCollider();
     }
 
     public override void SetParameter(string parameterName, int value)
@@ -98,7 +99,7 @@ public abstract class FurnitureConstructor<T> : IFurnitureContructor where T : c
         Construct();
         RecalculateBoxCollider();
     }
-        
+
     public void Start()
     {
         //TODO: this should be "Construct" after done testing
@@ -128,6 +129,13 @@ public abstract class FurnitureConstructor<T> : IFurnitureContructor where T : c
         Debug.Log("Color Palette Index: " + collorPalleteIndex);
         Debug.Log("Palette Index" + index);
         return colorPaletteList[collorPalleteIndex].GetMaterial(index);
+    }
+
+    public override FurnitureParameter GetParameter(string parameterName)
+    {
+        if (!parameters.ContainsKey(parameterName))
+            throw new FurnitureParameterNotFoundException(parameterName);
+        return parameters[parameterName];
     }
 }
 

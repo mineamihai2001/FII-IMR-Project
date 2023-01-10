@@ -2,15 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IFurnitureContructor : MonoBehaviour
+abstract public class IFurnitureContructor : MonoBehaviour
 {
-    public virtual void SetParameter(string parameterName, int value)
-    {
-        Debug.LogError("SetParameter not implemented");
-    }
+    abstract public void SetParameter(string parameterName, int value);
 
-    public virtual void Reconstruct()
-    {
-        Debug.LogError("Reconstruct not implemented");
-    }
+    abstract public FurnitureParameter GetParameter(string parameterName);
+
+    abstract public void Reconstruct();
 }
