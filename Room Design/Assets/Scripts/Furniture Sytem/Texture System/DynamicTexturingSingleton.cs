@@ -163,8 +163,8 @@ public class DynamicTexturingSingleton : MonoBehaviour
         DynamicTextures["Plastic"] = PlasticDynamicMaterial;
         StaticTextures["Dark Wood"] = Resources.Load<Material>("Materials/Dark Wood/Material");
         StaticTextures["Light Wood"] = Resources.Load<Material>("Materials/Light Wood/Material");
-
-
+        StaticTextures["Glass"] = Resources.Load<Material>("Materials/Glass/Material");
+        StaticTextures["Metal"] = Resources.Load<Material>("Materials/Metal/Material");
     }
 
 
