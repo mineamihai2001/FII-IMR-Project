@@ -117,9 +117,8 @@ public abstract class FurnitureConstructor<T> : IFurnitureContructor where T : c
     protected GameObject BePart(string name)
     {
         GameObject obj = GetPart(name);
-        if (obj.GetComponent<BoxCollider>() != null)
+        if (gameObject.GetComponent<BoxCollider>() == null)
             GetBoxCollider(obj);
-        GetBoxCollider(obj);
         return obj;
     }
 
