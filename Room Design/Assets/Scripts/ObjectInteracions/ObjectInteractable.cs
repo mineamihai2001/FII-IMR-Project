@@ -7,12 +7,21 @@ public class ObjectInteractable : XRSimpleInteractable
     public static LayerMask floorMask;
     public static XRRayInteractor ray;
     public static InputActionProperty grabButton;
+    public static ObjectMenuManager menuManager;
 
     private bool isGrabbed = false;
     private bool wasForcedGrabbed = false;
     private Collider colliderComponent;
 
-    private void handleGrab()
+    public void ClickHandler()
+    {
+        if (isGrabbed)
+            return;
+
+        menuManager.objectToEdit = gameObject;
+    }
+
+    private void HandleGrab()
     {
         Vector3 rayOrigin = ray.transform.position;
         Vector3 rayDirection = ray.transform.forward;
@@ -42,17 +51,20 @@ public class ObjectInteractable : XRSimpleInteractable
         //    return;
         //}
         //Debug.Log("Grabbed");
+        menuManager.objectToEdit = null;
+        colliderComponent = GetComponent<Collider>();
         isGrabbed = true;
     }
 
     private void ReleaseHandler(SelectExitEventArgs args)
     {
         isGrabbed = false;
+        //menuManager.objectToEdit = gameObject;
     }
 
     public void ForceGrab()
     {
-        isGrabbed = true;
+        GrabHandler(null);
         wasForcedGrabbed = true;
     }
 
@@ -69,11 +81,11 @@ public class ObjectInteractable : XRSimpleInteractable
         if (wasForcedGrabbed && grabButton.action.WasReleasedThisFrame() )
         {
             wasForcedGrabbed = false;
-            isGrabbed = false;
+            ReleaseHandler(null);
         }
         if (isGrabbed)
         {
-            handleGrab();
+            HandleGrab();
         }
     }
 }

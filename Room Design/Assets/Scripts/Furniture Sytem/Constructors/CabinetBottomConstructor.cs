@@ -36,4 +36,5 @@ public class CabinetBottomConstructor : FurnitureConstructor<CabinetBottomConstr
         handle.GetComponent<Renderer>().material = plasticMaterial;
     }
 
+
 }
